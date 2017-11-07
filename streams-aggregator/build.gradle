@@ -1,0 +1,7 @@
+apply plugin: 'application'
+
+mainClassName = 'io.jeffchao.streams.aggregator.WordCount'
+
+dependencies {
+  compile 'org.apache.kafka:kafka-streams:1.0.0'
+}

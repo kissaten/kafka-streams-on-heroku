@@ -1,0 +1,1 @@
+aggregator_worker: java -jar streams-aggregator-all.jar
