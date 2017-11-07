@@ -1,1 +1,1 @@
-aggregator_worker: java -jar streams-aggregator-all.jar
+aggregator_worker: java -jar build/libs/streams-aggregator-all.jar
