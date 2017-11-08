@@ -4,4 +4,9 @@ mainClassName = 'io.jeffchao.streams.aggregator.WordCount'
 
 dependencies {
   compile 'org.apache.kafka:kafka-streams:1.0.0'
+  compile 'com.heroku.sdk:env-keystore:1.0.0'
+}
+
+run.doFirst {
+  environment "HEROKU_KAFKA_JCHAO_URL", "kafka://localhost:9092"
 }
