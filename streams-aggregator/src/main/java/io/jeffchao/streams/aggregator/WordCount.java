@@ -21,6 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/*
+TODO(Jeff): HEROKU_KAFKA config var for specifying which Kafka
+TODO(Jeff): application.id + scaling dynos
+TODO(Jeff): sinking to postgres + make dataclip
+TODO(Jeff): Threshold trigger topology
+TODO(Jeff): Stretch - making it work on MT
+*/
 public class WordCount {
 
   private static final Logger log = LoggerFactory.getLogger(WordCount.class);
