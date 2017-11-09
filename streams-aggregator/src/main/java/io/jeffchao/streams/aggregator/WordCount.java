@@ -22,11 +22,10 @@ import org.slf4j.LoggerFactory;
 
 
 /*
+TODO(Jeff): Making it work on MT
 TODO(Jeff): HEROKU_KAFKA config var for specifying which Kafka
-TODO(Jeff): application.id + scaling dynos
 TODO(Jeff): sinking to postgres + make dataclip
 TODO(Jeff): Threshold trigger topology
-TODO(Jeff): Stretch - making it work on MT
 */
 public class WordCount {
 
@@ -41,7 +40,7 @@ public class WordCount {
 
     final StreamsBuilder builder = new StreamsBuilder();
 
-    final KStream<String, String> textLines = builder.stream("textlines");
+    final KStream<String, String> textLines = builder.stream("sanjuan-74569.textlines");
 
     final Pattern pattern = Pattern.compile("\\W+", Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -50,7 +49,7 @@ public class WordCount {
         .groupBy((key, word) -> word)
         .count(Materialized.as("counts"));
 
-    wordCounts.toStream().to("wordswithcounts", Produced.with(stringSerde, longSerde));
+    wordCounts.toStream().to("sanjuan-74569.wordswithcounts", Produced.with(stringSerde, longSerde));
 
     final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
 
