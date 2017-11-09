@@ -19,6 +19,7 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class AggregatorConfig extends Properties {
 
   private static final Logger log = LoggerFactory.getLogger(AggregatorConfig.class);
 
-  private static final String SUFFIX = "_JCHAO";
+  private static final String SUFFIX = "_JCHAO_NAVY";
   private static final String HEROKU_KAFKA = String.format("HEROKU_KAFKA%s", SUFFIX);
   private static final String HEROKU_KAFKA_URL = String.format("%s_URL", HEROKU_KAFKA);
   private static final String HEROKU_KAFKA_TRUSTED_CERT =
@@ -112,6 +113,8 @@ public class AggregatorConfig extends Properties {
         Serdes.String().getClass().getName());
     properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);
     properties.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
+    properties.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
+        LogAndSkipOnInvalidTimestamp.class);
 
     return properties;
   }
