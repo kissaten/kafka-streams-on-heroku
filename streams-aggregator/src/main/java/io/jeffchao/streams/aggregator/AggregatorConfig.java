@@ -19,7 +19,7 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp;
+import org.apache.kafka.streams.processor.WallclockTimestampExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +114,7 @@ public class AggregatorConfig extends Properties {
     properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);
     properties.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
     properties.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
-        LogAndSkipOnInvalidTimestamp.class);
+        WallclockTimestampExtractor.class);
 
     return properties;
   }
