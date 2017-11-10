@@ -14,7 +14,6 @@ Kafka Streams example on Heroku with a multi-project gradle build
 ### Building
 
 ```
-$ gradle (one-time initialization)
 $ ./gradlew clean build
 ```
 
