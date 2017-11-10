@@ -5,9 +5,11 @@ mainClassName = 'io.jeffchao.streams.anomalychecker.AnomalyChecker'
 dependencies {
   compile 'org.apache.kafka:kafka-streams:1.0.0'
   compile 'com.heroku.sdk:env-keystore:1.0.0'
+  compile 'com.sendgrid:sendgrid-java:3.0.9'
 }
 
 run.doFirst {
+  environment "ENVIRONMENT", "local"
   environment "ADDON_SUFFIX", ""
   environment "HEROKU_KAFKA_URL", "kafka://localhost:9092"
 }
