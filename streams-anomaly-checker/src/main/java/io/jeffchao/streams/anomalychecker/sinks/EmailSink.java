@@ -43,6 +43,7 @@ public class EmailSink implements Processor<String, String> {
   public void process(String key, String value) {
     if (Strings.isNullOrEmpty(System.getenv("ENVIRONMENT"))) {
       try {
+        log.info("Sending email to {}", System.getenv("TESTING_EMAIL"));
         sendEmail(key, value);
       } catch (IOException e) {
         log.error(e.getMessage(), e);
