@@ -8,6 +8,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import com.google.common.base.Joiner;
@@ -24,12 +25,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class AggregatorConfig extends Properties {
+class AggregatorConfig extends Properties {
 
   private static final Logger log = LoggerFactory.getLogger(AggregatorConfig.class);
 
-  private static final String SUFFIX = "_JCHAO_NAVY";
-  private static final String HEROKU_KAFKA = String.format("HEROKU_KAFKA%s", SUFFIX);
+  private static final String ADDON_SUFFIX = Optional.ofNullable(
+      System.getenv("ADDON_SUFFIX")).orElse("");
+  private static final String HEROKU_KAFKA = String.format("HEROKU_KAFKA%s", ADDON_SUFFIX);
   private static final String HEROKU_KAFKA_URL = String.format("%s_URL", HEROKU_KAFKA);
   private static final String HEROKU_KAFKA_TRUSTED_CERT =
       String.format("%s_TRUSTED_CERT", HEROKU_KAFKA);
@@ -40,7 +42,7 @@ public class AggregatorConfig extends Properties {
 
   private String bootstrapServers;
 
-  public Properties getProperties() throws URISyntaxException, CertificateException,
+  Properties getProperties() throws URISyntaxException, CertificateException,
       NoSuchAlgorithmException, KeyStoreException, IOException {
     return buildDefaults();
   }
@@ -76,7 +78,8 @@ public class AggregatorConfig extends Properties {
         break;
       case "kafka+ssl":
         properties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
-        EnvKeyStore envTrustStore = EnvKeyStore.createWithRandomPassword(HEROKU_KAFKA_TRUSTED_CERT);
+        EnvKeyStore envTrustStore = EnvKeyStore.createWithRandomPassword(
+            HEROKU_KAFKA_TRUSTED_CERT);
         EnvKeyStore envKeyStore = EnvKeyStore.createWithRandomPassword(
             HEROKU_KAFKA_CLIENT_CERT_KEY, HEROKU_KAFKA_CLIENT_CERT);
 
@@ -84,7 +87,8 @@ public class AggregatorConfig extends Properties {
         File keyStoreFile = envKeyStore.storeTemp();
 
         properties.put(SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG, envTrustStore.type());
-        properties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, trustStoreFile.getAbsolutePath());
+        properties.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG,
+            trustStoreFile.getAbsolutePath());
         properties.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, envTrustStore.password());
         properties.put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, envKeyStore.type());
         properties.put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, keyStoreFile.getAbsolutePath());

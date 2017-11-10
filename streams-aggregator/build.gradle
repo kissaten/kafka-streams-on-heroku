@@ -8,5 +8,6 @@ dependencies {
 }
 
 run.doFirst {
-  environment "HEROKU_KAFKA_JCHAO_URL", "kafka://localhost:9092"
+  environment "ADDON_SUFFIX", ""
+  environment "HEROKU_KAFKA_URL", "kafka://localhost:9092"
 }

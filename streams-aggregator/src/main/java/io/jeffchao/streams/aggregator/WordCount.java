@@ -6,6 +6,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -22,14 +23,16 @@ import org.slf4j.LoggerFactory;
 
 
 /*
-TODO(Jeff): Making it work on MT
-TODO(Jeff): HEROKU_KAFKA config var for specifying which Kafka
 TODO(Jeff): sinking to postgres + make dataclip
 TODO(Jeff): Threshold trigger topology
+TODO(Jeff): tests
 */
 public class WordCount {
 
   private static final Logger log = LoggerFactory.getLogger(WordCount.class);
+
+  private static final String TOPIC_PREFIX =
+      Optional.ofNullable(System.getenv("TOPIC_PREFIX")).orElse("");
 
   public static void main(String[] args) throws CertificateException, NoSuchAlgorithmException,
       KeyStoreException, IOException, URISyntaxException {
@@ -40,7 +43,8 @@ public class WordCount {
 
     final StreamsBuilder builder = new StreamsBuilder();
 
-    final KStream<String, String> textLines = builder.stream("sanjuan-74569.textlines");
+    final KStream<String, String> textLines =
+        builder.stream(String.format("%stextlines", TOPIC_PREFIX));
 
     final Pattern pattern = Pattern.compile("\\W+", Pattern.UNICODE_CHARACTER_CLASS);
 
@@ -49,7 +53,9 @@ public class WordCount {
         .groupBy((key, word) -> word)
         .count(Materialized.as("counts"));
 
-    wordCounts.toStream().to("sanjuan-74569.wordswithcounts", Produced.with(stringSerde, longSerde));
+    wordCounts.toStream()
+        .to(String.format("%swordswithcounts", TOPIC_PREFIX),
+            Produced.with(stringSerde, longSerde));
 
     final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
 
