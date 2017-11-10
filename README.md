@@ -14,7 +14,7 @@ Kafka Streams example on Heroku with a multi-project gradle build
 ### Building
 
 ```
-$ gradle
+$ gradle (one-time initialization)
 $ ./gradlew clean build
 ```
 
@@ -24,7 +24,13 @@ $ ./gradlew clean build
 $ ./gradlew clean test
 ```
 
-## Running Locally
+### Building FatJar Artifacts
+
+```
+$ ./gradlew clean stage
+```
+
+### Running Locally
 
 Topologies are organized as subprojects. You can run any or all of them
 
@@ -46,7 +52,7 @@ $ ./gradlew streams-anomaly-checker:run
 
 ### Config Vars
 
-1. `ADDON_SUFFIX` (if addon name is different from `HEROKU_KAFKA`
+1. `ADDON_SUFFIX` (if addon name is different from `HEROKU_KAFKA`)
 2. `SENDGRID_API_KEY`
 3. `TESTING_EMAIL` (for sinking to a test email)
 
