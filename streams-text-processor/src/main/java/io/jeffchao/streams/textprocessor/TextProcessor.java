@@ -48,15 +48,6 @@ public class TextProcessor {
         .flatMapValues(value -> Arrays.asList(pattern.split(value.toLowerCase())))
         .to(String.format("%swords", TOPIC_PREFIX), Produced.with(stringSerde, stringSerde));
 
-    //    final KTable<String, Long> wordCounts = textLines
-    //        .flatMapValues(value -> Arrays.asList(pattern.split(value.toLowerCase())))
-    //        .groupBy((key, word) -> word)
-    //        .count(Materialized.as("counts"));
-
-    //    wordCounts.toStream()
-    //        .to(String.format("%swordswithcounts", TOPIC_PREFIX),
-    //            Produced.with(stringSerde, longSerde));
-
     final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
 
     streams.cleanUp();
