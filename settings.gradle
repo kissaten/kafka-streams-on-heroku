@@ -1,4 +1,6 @@
 rootProject.name = 'kafka-streams-on-heroku'
 
-include 'streams-generator'
+include 'streams-text-processor'
+include 'streams-anomaly-checker'
 include 'streams-aggregator'
+//include 'streams-trend-analyzer'

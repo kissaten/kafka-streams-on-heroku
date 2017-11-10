@@ -1,4 +1,4 @@
-package io.jeffchao.streams.aggregator;
+package io.jeffchao.streams.textprocessor;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-class AggregatorConfig extends Properties {
+class TextProcessorConfig extends Properties {
 
-  private static final Logger log = LoggerFactory.getLogger(AggregatorConfig.class);
+  private static final Logger log = LoggerFactory.getLogger(TextProcessorConfig.class);
 
   private static final String ADDON_SUFFIX = Optional.ofNullable(
       System.getenv("ADDON_SUFFIX")).orElse("");
@@ -106,8 +106,8 @@ class AggregatorConfig extends Properties {
 
   private Properties buildKafkaStreamsDefaults() {
     Properties properties = new Properties();
-    properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "aggregator-app");
-    properties.put(StreamsConfig.CLIENT_ID_CONFIG, "aggregator-client");
+    properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "text-processor-app");
+    properties.put(StreamsConfig.CLIENT_ID_CONFIG, "text-processor-client");
     properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     properties.put(
         StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,
