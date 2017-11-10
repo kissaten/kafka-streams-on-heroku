@@ -1,2 +1,3 @@
-# basic-gradle-template
-Basic gradle template with subprojects
+# kafka-streams-on-heroku
+
+Kafka Streams example on Heroku with a multi-project gradle build
