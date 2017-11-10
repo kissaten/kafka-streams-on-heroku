@@ -5,9 +5,11 @@ mainClassName = 'io.jeffchao.streams.aggregator.Aggregator'
 dependencies {
   compile 'org.apache.kafka:kafka-streams:1.0.0'
   compile 'com.heroku.sdk:env-keystore:1.0.0'
+  compile 'org.postgresql:postgresql:42.1.4.jre7'
 }
 
 run.doFirst {
   environment "ADDON_SUFFIX", ""
   environment "HEROKU_KAFKA_URL", "kafka://localhost:9092"
+  environment "HEROKU_POSTGRESQL_URL", "postgres://localhost:5432/kafka_streams_dev"
 }
