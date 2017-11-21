@@ -32,6 +32,8 @@ class AnomalyCheckerConfig extends Properties {
   private static final String ADDON_SUFFIX = Optional.ofNullable(
       System.getenv("ADDON_SUFFIX")).orElse("");
   private static final String HEROKU_KAFKA = String.format("HEROKU_KAFKA%s", ADDON_SUFFIX);
+  private static final String HEROKU_KAFKA_PREFIX = Optional.ofNullable(
+      System.getenv(String.format("%s_PREFIX", HEROKU_KAFKA))).orElse("");
   private static final String HEROKU_KAFKA_URL = String.format("%s_URL", HEROKU_KAFKA);
   private static final String HEROKU_KAFKA_TRUSTED_CERT =
       String.format("%s_TRUSTED_CERT", HEROKU_KAFKA);
@@ -106,8 +108,10 @@ class AnomalyCheckerConfig extends Properties {
 
   private Properties buildKafkaStreamsDefaults() {
     Properties properties = new Properties();
-    properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "anomaly-checker-app");
-    properties.put(StreamsConfig.CLIENT_ID_CONFIG, "anomaly-checker-client");
+    properties.put(StreamsConfig.APPLICATION_ID_CONFIG,
+        String.format("%sanomaly-checker-app", HEROKU_KAFKA_PREFIX));
+    properties.put(StreamsConfig.CLIENT_ID_CONFIG,
+        String.format("%sanomaly-checker-client", HEROKU_KAFKA_PREFIX));
     properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     properties.put(
         StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,
