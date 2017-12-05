@@ -64,3 +64,10 @@ git push heroku master (runs ./gradlew clean stage)
 ```
 ./setup <app name> <plan>
 ```
+
+### Smoke Testing
+
+```
+heroku kafka:topics:write [prefix]textlines "hello world" -a <app>
+heroku pg:psql -c 'select * from windowed_counts' HEROKU_POSTGRESQL_URL -a <app>
+```
