@@ -24,8 +24,11 @@ public class Aggregator {
 
   private static final Logger log = LoggerFactory.getLogger(Aggregator.class);
 
-  private static final String TOPIC_PREFIX =
-      Optional.ofNullable(System.getenv("TOPIC_PREFIX")).orElse("");
+  private static final String ADDON_SUFFIX = Optional.ofNullable(
+      System.getenv("ADDON_SUFFIX")).orElse("");
+  private static final String HEROKU_KAFKA = String.format("HEROKU_KAFKA%s", ADDON_SUFFIX);
+  private static final String HEROKU_KAFKA_PREFIX = Optional.ofNullable(
+      System.getenv(String.format("%s_PREFIX", HEROKU_KAFKA))).orElse("");
 
   public static void main(String[] args) throws CertificateException, NoSuchAlgorithmException,
       KeyStoreException, IOException, URISyntaxException {
@@ -34,7 +37,7 @@ public class Aggregator {
     final StreamsBuilder builder = new StreamsBuilder();
 
     final KStream<Windowed<String>, String> words =
-        builder.stream(String.format("%swords", TOPIC_PREFIX));
+        builder.stream(String.format("%swords", HEROKU_KAFKA_PREFIX));
 
     words
         .groupBy((key, word) -> word)
