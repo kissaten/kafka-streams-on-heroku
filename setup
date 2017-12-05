@@ -46,4 +46,4 @@ heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, 
 
 heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
 heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
-#heroku ps:scale anomaly_checker_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.
+# heroku ps:scale anomaly_checker_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.

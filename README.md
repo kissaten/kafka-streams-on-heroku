@@ -46,7 +46,7 @@ $ ./gradlew streams-anomaly-checker:run
 ### Dependencies
 
 1. Postgres
-3. Kafka (dedicated)
+3. Kafka
 
 ### Config Vars
 
