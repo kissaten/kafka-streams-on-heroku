@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 setup_dedicated () {
   heroku addons:create heroku-postgresql:hobby-dev --as HEROKU_POSTGRESQL -a ${APP_NAME} && \
     heroku addons:create heroku-kafka:${PLAN} --as HEROKU_KAFKA -a ${APP_NAME} && \
