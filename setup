@@ -3,7 +3,8 @@
 set -e
 
 setup_dedicated () {
-  heroku addons:create heroku-kafka:${PLAN} -a ${APP_NAME} && \
+  heroku addons:create heroku-postgresql:hobby-dev --as HEROKU_POSTGRESQL -a ${APP_NAME} && \
+    heroku addons:create heroku-kafka:${PLAN} --as HEROKU_KAFKA -a ${APP_NAME} && \
     heroku kafka:wait -a ${APP_NAME} && \
     heroku kafka:topics:create textlines -a ${APP_NAME} && \
     heroku kafka:topics:create words -a ${APP_NAME} && \
@@ -11,7 +12,8 @@ setup_dedicated () {
 }
 
 setup_multi_tenant () {
-  heroku addons:create heroku-kafka:${PLAN} -a ${APP_NAME} && \
+  heroku addons:create heroku-postgresql:hobby-dev --as HEROKU_POSTGRESQL -a ${APP_NAME} && \
+    heroku addons:create heroku-kafka:${PLAN} --as HEROKU_KAFKA -a ${APP_NAME} && \
     heroku kafka:wait -a ${APP_NAME} && \
     heroku kafka:topics:create textlines -a ${APP_NAME} && \
     heroku kafka:topics:create words -a ${APP_NAME} && \
@@ -41,3 +43,9 @@ if [[ "$PLAN" =~ 'basic-[012]' ]]; then
 else
   setup_multi_tenant
 fi
+
+heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, time_window bigint not null, word text, count bigint not null);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
+
+heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
+heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
+#heroku ps:scale anomaly_checker_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.
