@@ -41,17 +41,17 @@ public class EmailSink implements Processor<String, String> {
 
   @Override
   public void process(String key, String value) {
-    if (Strings.isNullOrEmpty(System.getenv("ENVIRONMENT"))) {
+    if (System.getenv("ENVIRONMENT").equalsIgnoreCase("local") ||
+        Strings.isNullOrEmpty(System.getenv("SENDGRID_API_KEY"))) {
+      log.info("Sending mock email: {}", value);
+    } else {
       try {
         log.info("Sending email to {}", System.getenv("TESTING_EMAIL"));
         sendEmail(key, value);
       } catch (IOException e) {
         log.error(e.getMessage(), e);
       }
-    } else if (System.getenv("ENVIRONMENT").equalsIgnoreCase("local")) {
-      log.info("Sending email: {}", value);
     }
-
   }
 
   @Override

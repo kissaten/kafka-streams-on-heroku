@@ -20,10 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-/*
-TODO(Jeff): Threshold trigger topology
-TODO(Jeff): tests
-*/
 public class TextProcessor {
 
   private static final Logger log = LoggerFactory.getLogger(TextProcessor.class);

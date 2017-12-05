@@ -46,17 +46,21 @@ $ ./gradlew streams-anomaly-checker:run
 ### Dependencies
 
 1. Postgres
-2. Sendgrid
 3. Kafka (dedicated)
 
 ### Config Vars
 
-1. `ADDON_SUFFIX` (if addon name is different from `HEROKU_KAFKA`)
-2. `SENDGRID_API_KEY`
-3. `TESTING_EMAIL` (for sinking to a test email)
+1. `SENDGRID_API_KEY` (optional via SendGrid addon)
+2. `TESTING_EMAIL` (optional for sinking to a test email using SendGrid addon)
 
 ### Deploying
 
 ```
 git push heroku master (runs ./gradlew clean stage)
+```
+
+### Setup
+
+```
+./setup <app name> <plan>
 ```

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -e
+
+setup_dedicated () {
+  heroku addons:create heroku-kafka:${PLAN} -a ${APP_NAME} && \
+    heroku kafka:wait -a ${APP_NAME} && \
+    heroku kafka:topics:create textlines -a ${APP_NAME} && \
+    heroku kafka:topics:create words -a ${APP_NAME} && \
+    heroku kafka:topics:create wordswithcounts -a ${APP_NAME}
+}
+
+setup_multi_tenant () {
+  heroku addons:create heroku-kafka:${PLAN} -a ${APP_NAME} && \
+    heroku kafka:wait -a ${APP_NAME} && \
+    heroku kafka:topics:create textlines -a ${APP_NAME} && \
+    heroku kafka:topics:create words -a ${APP_NAME} && \
+    heroku kafka:topics:create wordswithcounts -a ${APP_NAME} && \
+    heroku kafka:topics:create aggregator-app-windowed-counts-changelog -a ${APP_NAME} && \
+    heroku kafka:topics:create aggregator-app-windowed-counts-repartition -a ${APP_NAME} && \
+    heroku kafka:consumer-groups:create anomaly-checker-app -a ${APP_NAME} && \
+    heroku kafka:consumer-groups:create text-processor-app -a ${APP_NAME} && \
+    heroku kafka:consumer-groups:create aggregator-app -a ${APP_NAME}
+}
+
+if [[ -z $1 ]]; then
+    echo "usage: $0 APP_NAME PLAN" >&2
+    exit 1
+fi
+
+APP_NAME=$1
+
+if [[ "$2" =~ '(standard|basic|extended|private-standard|private-extended)-[012]' ]]; then
+  PLAN=$2
+else
+  PLAN="basic-0"
+fi
+
+if [[ "$PLAN" =~ 'basic-[012]' ]]; then
+  setup_dedicated
+else
+  setup_multi_tenant
+fi
