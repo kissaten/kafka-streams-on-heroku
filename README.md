@@ -61,6 +61,17 @@ git push heroku master (runs ./gradlew clean stage)
 
 ### Setup
 
+Install the Heroku CLI: https://devcenter.heroku.com/articles/heroku-cli
+
+
+Install the Heroku Kafka CLI Plugin:
+
+```
+heroku plugins:install heroku-kafka
+```
+
+Run the setup script:
+
 ```
 ./setup <app name> <plan>
 ```
