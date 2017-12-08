@@ -46,7 +46,9 @@ $ ./gradlew streams-anomaly-checker:run
 ### Dependencies
 
 1. Postgres
-3. Kafka
+2. Kafka
+3. Heroku CLI
+4. Heroku Kafka CLI Plugin
 
 ### Config Vars
 
