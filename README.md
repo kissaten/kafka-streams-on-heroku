@@ -70,15 +70,34 @@ Install the Heroku Kafka CLI Plugin:
 heroku plugins:install heroku-kafka
 ```
 
+Clone the application:
+
+```
+$ git clone git@github.com:jeffchao/kafka-streams-on-heroku.git
+```
+
+Create the application:
+
+```
+$ cd kafka-streams-on-heroku
+$ heroku apps:create <application name>
+```
+
+Deploy the application:
+
+```
+$ git push heroku master
+```
+
 Run the setup script:
 
 ```
-./setup <app name> <plan>
+$ ./setup <app name> <plan>
 ```
 
 ### Smoke Testing
 
 ```
-heroku kafka:topics:write [prefix]textlines "hello world" -a <app>
-heroku pg:psql -c 'select * from windowed_counts' HEROKU_POSTGRESQL_URL -a <app>
+$ heroku kafka:topics:write [prefix]textlines "hello world" -a <app>
+$ heroku pg:psql -c 'select * from windowed_counts' HEROKU_POSTGRESQL_URL -a <app>
 ```
