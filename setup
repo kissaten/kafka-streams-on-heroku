@@ -39,9 +39,9 @@ else
 fi
 
 if [[ "$PLAN" =~ 'basic-[012]' ]]; then
-  setup_dedicated
-else
   setup_multi_tenant
+else
+  setup_dedicated
 fi
 
 heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, time_window bigint not null, word text, count bigint not null);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
