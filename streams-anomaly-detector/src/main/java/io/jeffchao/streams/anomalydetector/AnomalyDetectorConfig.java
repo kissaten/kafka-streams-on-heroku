@@ -109,9 +109,9 @@ class AnomalyDetectorConfig extends Properties {
   private Properties buildKafkaStreamsDefaults() {
     Properties properties = new Properties();
     properties.put(StreamsConfig.APPLICATION_ID_CONFIG,
-        String.format("%sanomaly-checker-app", HEROKU_KAFKA_PREFIX));
+        String.format("%sanomaly-detector-app", HEROKU_KAFKA_PREFIX));
     properties.put(StreamsConfig.CLIENT_ID_CONFIG,
-        String.format("%sanomaly-checker-client", HEROKU_KAFKA_PREFIX));
+        String.format("%sanomaly-detector-client", HEROKU_KAFKA_PREFIX));
     properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     properties.put(
         StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG,
