@@ -17,7 +17,7 @@ public class AlertSink implements Processor<Windowed<String>, Long> {
 
   @Override
   public void process(Windowed<String> key, Long value) {
-      log.info("Too many login failures for user: {}, count: {}. Alerting to PagerDuty.",
+      log.info("Too many login failures for {}, count: {}. Alerting to PagerDuty.",
           key.key(), value);
   }
 
