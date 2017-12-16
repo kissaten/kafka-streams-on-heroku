@@ -14,6 +14,7 @@ import io.jeffchao.streams.anomalydetector.sinks.EmailSink;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class AnomalyDetector {
         .selectKey((key, value) -> value.split("\\|")[0])
         .groupByKey()
         .windowedBy(TimeWindows.of(TimeUnit.SECONDS.toMillis(10)))
-        .count()
+        .count(Materialized.as("windowed-counts"))
         .toStream();
 
     @SuppressWarnings("unchecked")
