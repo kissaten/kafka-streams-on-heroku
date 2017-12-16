@@ -47,9 +47,7 @@ public class EmailSink implements Processor<Windowed<String>, Long> {
 
   @Override
   public void process(Windowed<String> key, Long value) {
-    if (System.getenv("ENVIRONMENT").equalsIgnoreCase("local") ||
-        Strings.isNullOrEmpty(System.getenv("SENDGRID_API_KEY"))) {
-
+    if (Strings.isNullOrEmpty(System.getenv("SENDGRID_API_KEY"))) {
       log.info(generateContent(key, value).getValue());
     } else {
       try {
