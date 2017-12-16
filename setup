@@ -32,20 +32,20 @@ fi
 
 APP_NAME=$1
 
-if [[ "$2" =~ '(standard|basic|extended|private-standard|private-extended)-[012]' ]]; then
+if [[ $2 =~ (standard|basic|extended|private-standard|private-extended)-[012] ]]; then
   PLAN=$2
 else
   PLAN="basic-0"
 fi
 
-if [[ "$PLAN" =~ 'basic-[012]' ]]; then
+if [[ $PLAN =~ basic-[012] ]]; then
   setup_multi_tenant
 else
   setup_dedicated
 fi
 
-heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, time_window bigint not null, word text, count bigint not null);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
+ heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, time_window bigint not null, word text, count bigint not null);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
 
-heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
-heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
-# heroku ps:scale anomaly_detector_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.
+ heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
+ heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
+ heroku ps:scale anomaly_detector_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.
