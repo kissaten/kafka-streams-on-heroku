@@ -1,4 +1,4 @@
-package io.jeffchao.streams.anomalychecker;
+package io.jeffchao.streams.anomalydetector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -7,18 +7,22 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import io.jeffchao.streams.anomalychecker.sinks.EmailSink;
+import io.jeffchao.streams.anomalydetector.sinks.AlertSink;
+import io.jeffchao.streams.anomalydetector.sinks.EmailSink;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.kstream.Windowed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class AnomalyChecker {
+public class AnomalyDetector {
 
-  private static final Logger log = LoggerFactory.getLogger(AnomalyChecker.class);
+  private static final Logger log = LoggerFactory.getLogger(AnomalyDetector.class);
 
   private static final String ADDON_SUFFIX = Optional.ofNullable(
       System.getenv("ADDON_SUFFIX")).orElse("");
@@ -28,16 +32,30 @@ public class AnomalyChecker {
 
   public static void main(String[] args) throws CertificateException, NoSuchAlgorithmException,
       KeyStoreException, IOException, URISyntaxException {
-    Properties streamsConfig = new AnomalyCheckerConfig().getProperties();
+    Properties streamsConfig = new AnomalyDetectorConfig().getProperties();
 
     final StreamsBuilder builder = new StreamsBuilder();
 
     final KStream<String, String> words =
-        builder.stream(String.format("%swords", HEROKU_KAFKA_PREFIX));
+        builder.stream( String.format("%sloglines", HEROKU_KAFKA_PREFIX));
 
-    words
-        .filter((key, value) -> value.equalsIgnoreCase("1337"))
-        .process(EmailSink::new);
+    KStream<Windowed<String>, Long> anomalies = words
+        .filter((key, value) -> value.contains("failed login"))
+        .selectKey((key, value) -> value.split("\\|")[0])
+        .groupByKey()
+        .windowedBy(TimeWindows.of(TimeUnit.SECONDS.toMillis(10)))
+        .count()
+        .toStream();
+
+    @SuppressWarnings("unchecked")
+    KStream<Windowed<String>, Long>[] branches = anomalies
+        .branch(
+            (key, value) -> value > 1,
+            (key, value) -> value > 0
+        );
+
+    branches[0].process(AlertSink::new);
+    branches[1].process(EmailSink::new);
 
     final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
 

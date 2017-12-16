@@ -1,4 +1,4 @@
-package io.jeffchao.streams.anomalychecker.sinks;
+package io.jeffchao.streams.anomalydetector.sinks;
 
 import java.io.IOException;
 
@@ -9,13 +9,14 @@ import com.sendgrid.Mail;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
+import org.apache.kafka.streams.kstream.Windowed;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class EmailSink implements Processor<String, String> {
+public class EmailSink implements Processor<Windowed<String>, Long> {
 
   private static final Logger log = LoggerFactory.getLogger(EmailSink.class);
 
@@ -23,12 +24,17 @@ public class EmailSink implements Processor<String, String> {
   public void init(ProcessorContext context) {
   }
 
-  private void sendEmail(String key, String value) throws IOException {
+  private Content generateContent(Windowed<String> key, Long value) {
+    return new Content("text/plain", "Hello, our realtime anomaly detector "
+        + "has detected an issue for " + key.key() + " with "
+        + value + " failed login attempts");
+  }
+
+  private void sendEmail(Windowed<String> key, Long value) throws IOException {
     Email from = new Email("example@example.com");
     String subject = String.format("Anomaly detected for %s", value);
     Email to = new Email(System.getenv("TESTING_EMAIL"));
-    Content content = new Content("text/plain", "Hello, our realtime anomaly detector "
-        + "has detected the word " + value + "!");
+    Content content = generateContent(key, value);
     Mail mail = new Mail(from, subject, to, content);
 
     SendGrid sendGrid = new SendGrid(System.getenv("SENDGRID_API_KEY"));
@@ -40,13 +46,16 @@ public class EmailSink implements Processor<String, String> {
   }
 
   @Override
-  public void process(String key, String value) {
+  public void process(Windowed<String> key, Long value) {
     if (System.getenv("ENVIRONMENT").equalsIgnoreCase("local") ||
         Strings.isNullOrEmpty(System.getenv("SENDGRID_API_KEY"))) {
-      log.info("Sending mock email: {}", value);
+
+      log.info(generateContent(key, value).getValue());
     } else {
       try {
-        log.info("Sending email to {}", System.getenv("TESTING_EMAIL"));
+        log.info("Sending email to {} with content {}",
+            System.getenv("TESTING_EMAIL"),
+            generateContent(key, value).toString());
         sendEmail(key, value);
       } catch (IOException e) {
         log.error(e.getMessage(), e);

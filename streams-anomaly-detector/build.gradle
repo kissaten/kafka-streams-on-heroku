@@ -1,6 +1,6 @@
 apply plugin: 'application'
 
-mainClassName = 'io.jeffchao.streams.anomalychecker.AnomalyChecker'
+mainClassName = 'io.jeffchao.streams.anomalydetector.AnomalyDetector'
 
 dependencies {
   compile 'org.apache.kafka:kafka-streams:1.0.0'

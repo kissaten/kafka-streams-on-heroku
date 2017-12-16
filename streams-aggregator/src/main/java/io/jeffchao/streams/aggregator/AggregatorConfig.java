@@ -119,8 +119,7 @@ class AggregatorConfig extends Properties {
     properties.put(
         StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,
         Serdes.String().getClass().getName());
-    properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);
-    properties.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
+    properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);
     properties.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
         WallclockTimestampExtractor.class);
 

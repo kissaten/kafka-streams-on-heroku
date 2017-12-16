@@ -8,7 +8,7 @@ setup_dedicated () {
     heroku kafka:wait -a ${APP_NAME} && \
     heroku kafka:topics:create textlines -a ${APP_NAME} && \
     heroku kafka:topics:create words -a ${APP_NAME} && \
-    heroku kafka:topics:create wordswithcounts -a ${APP_NAME}
+    heroku kafka:topics:create loglines -a ${APP_NAME}
 }
 
 setup_multi_tenant () {
@@ -17,10 +17,10 @@ setup_multi_tenant () {
     heroku kafka:wait -a ${APP_NAME} && \
     heroku kafka:topics:create textlines -a ${APP_NAME} && \
     heroku kafka:topics:create words -a ${APP_NAME} && \
-    heroku kafka:topics:create wordswithcounts -a ${APP_NAME} && \
+    heroku kafka:topics:create loglines -a ${APP_NAME} && \
     heroku kafka:topics:create aggregator-app-windowed-counts-changelog -a ${APP_NAME} && \
     heroku kafka:topics:create aggregator-app-windowed-counts-repartition -a ${APP_NAME} && \
-    heroku kafka:consumer-groups:create anomaly-checker-app -a ${APP_NAME} && \
+    heroku kafka:consumer-groups:create anomaly-detector-app -a ${APP_NAME} && \
     heroku kafka:consumer-groups:create text-processor-app -a ${APP_NAME} && \
     heroku kafka:consumer-groups:create aggregator-app -a ${APP_NAME}
 }
@@ -48,4 +48,4 @@ heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, 
 
 heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
 heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
-# heroku ps:scale anomaly_checker_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.
+# heroku ps:scale anomaly_detector_worker=1 -a ${APP_NAME}  # Can't run more than 2 free dynos.

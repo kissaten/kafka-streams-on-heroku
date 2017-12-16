@@ -1,4 +1,4 @@
-package io.jeffchao.streams.anomalychecker;
+package io.jeffchao.streams.anomalydetector;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-class AnomalyCheckerConfig extends Properties {
+class AnomalyDetectorConfig extends Properties {
 
-  private static final Logger log = LoggerFactory.getLogger(AnomalyCheckerConfig.class);
+  private static final Logger log = LoggerFactory.getLogger(AnomalyDetectorConfig.class);
 
   private static final String ADDON_SUFFIX = Optional.ofNullable(
       System.getenv("ADDON_SUFFIX")).orElse("");
@@ -119,8 +119,7 @@ class AnomalyCheckerConfig extends Properties {
     properties.put(
         StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG,
         Serdes.String().getClass().getName());
-    properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 10 * 1000);
-    properties.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
+    properties.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);
     properties.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
         WallclockTimestampExtractor.class);
 
