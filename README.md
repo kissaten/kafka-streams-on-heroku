@@ -103,9 +103,11 @@ $ heroku pg:psql -c 'select * from windowed_counts' HEROKU_POSTGRESQL_URL -a <ap
 
 ### Example Use Cases
 
+Now let's use Kafka Streams with some example use cases. The `data-generators` directory contains some simple Ruby scripts to generate streams of data. Instructions on how to use them are below.
+
 #### Word Count
 
-Let's generate some sample data. This will produce into Kafka lines from _Alice's Adventures in Wonderland_.
+First we'll do word count over a large stream of text. This will produce into Kafka lines from _Alice's Adventures in Wonderland_.
 
 ```bash
 $ heroku run ruby data-generators/text-generator/stream-lines-to-kafka.rb data-generators/text-generator/alice-in-wonderland.txt
