@@ -55,11 +55,6 @@ $ ./gradlew streams-anomaly-checker:run
 1. `SENDGRID_API_KEY` (optional via SendGrid addon)
 2. `TESTING_EMAIL` (optional for sinking to a test email using SendGrid addon)
 
-### Deploying
-
-```
-git push heroku master (runs ./gradlew clean stage)
-```
 
 ### Setup
 
