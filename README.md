@@ -103,3 +103,36 @@ $ ./setup <app name> <plan>
 $ heroku kafka:topics:write [prefix]textlines "hello world" -a <app>
 $ heroku pg:psql -c 'select * from windowed_counts' HEROKU_POSTGRESQL_URL -a <app>
 ```
+
+### Example Use Cases
+
+#### Word Count
+
+Let's generate some sample data. This will produce into Kafka lines from _Alice's Adventures in Wonderland_.
+
+```bash
+$ heroku run ruby data-generators/text-generator/stream-lines-to-kafka.rb data-generators/text-generator/alice-in-wonderland.txt
+```
+
+Alternatively, if you have Ruby and Bundler installed locally, you can run the data generator locally
+
+```bash
+$ bundle install --path=vendor/gems
+$ cd data-generators/text-generator
+$ HEROKU_KAFKA_URL=$(heroku config:get HEROKU_KAFKA_URL) \
+HEROKU_KAFKA_CLIENT_CERT=$(heroku config:get HEROKU_KAFKA_CLIENT_CERT) \
+HEROKU_KAFKA_CLIENT_CERT_KEY=$(heroku config:get HEROKU_KAFKA_CLIENT_CERT_KEY) \
+HEROKU_KAFKA_TRUSTED_CERT=$(heroku config:get HEROKU_KAFKA_TRUSTED_CERT) \
+HEROKU_KAFKA_PREFIX=$(heroku config:get HEROKU_KAFKA_PREFIX) \
+bundle exec ruby stream-lines-to-kafka.rb alice-in-wonderland.txt
+```
+
+Now we can see the word count for specific time windows:
+
+```bash
+$ heroku pg:psql -c 'select * from windowed_counts order by count desc' HEROKU_POSTGRESQL_URL
+```
+
+#### Anomaly Detection
+
+WIP
