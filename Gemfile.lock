@@ -1,12 +1,18 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    concurrent-ruby (1.0.5)
+    faker (1.8.5)
+      i18n (~> 0.9.1)
+    i18n (0.9.1)
+      concurrent-ruby (~> 1.0)
     ruby-kafka (0.5.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  faker
   ruby-kafka
 
 BUNDLED WITH
