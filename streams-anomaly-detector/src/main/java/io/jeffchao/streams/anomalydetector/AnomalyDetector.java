@@ -41,7 +41,7 @@ public class AnomalyDetector {
         builder.stream( String.format("%sloglines", HEROKU_KAFKA_PREFIX));
 
     KStream<Windowed<String>, Long> anomalies = loglines
-        .filter((key, value) -> value.contains("failed login"))
+        .filter((key, value) -> value.contains("login failed"))
         .selectKey((key, value) -> value.split("\\|")[0])
         .groupByKey()
         .windowedBy(TimeWindows.of(TimeUnit.SECONDS.toMillis(10)))
