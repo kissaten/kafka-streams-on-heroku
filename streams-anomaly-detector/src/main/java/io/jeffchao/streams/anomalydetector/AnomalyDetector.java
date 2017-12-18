@@ -37,10 +37,10 @@ public class AnomalyDetector {
 
     final StreamsBuilder builder = new StreamsBuilder();
 
-    final KStream<String, String> words =
+    final KStream<String, String> loglines =
         builder.stream( String.format("%sloglines", HEROKU_KAFKA_PREFIX));
 
-    KStream<Windowed<String>, Long> anomalies = words
+    KStream<Windowed<String>, Long> anomalies = loglines
         .filter((key, value) -> value.contains("failed login"))
         .selectKey((key, value) -> value.split("\\|")[0])
         .groupByKey()
