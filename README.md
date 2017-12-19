@@ -110,7 +110,7 @@ Now let's use Kafka Streams with some example use cases. The `data-generators` d
 First we'll do word count over a large stream of text. This will produce into Kafka lines from _Alice's Adventures in Wonderland_.
 
 ```bash
-$ heroku run ruby data-generators/text-generator/stream-lines-to-kafka.rb data-generators/text-generator/alice-in-wonderland.txt
+$ heroku run ruby data-generators/text-generator/stream-lines-to-kafka.rb data-generators/text-generator/alice-in-wonderland.txt --app sushi
 ```
 
 Alternatively, if you have Ruby and Bundler installed locally, you can run the data generator locally
@@ -139,7 +139,7 @@ Let's look at a more interesting use case -- not only because it is more realist
 This will produce into Kafka fake log data at a rate of 10 messages per second with a 20% chance of anomaly.
 
 ```bash
-$ heroku run ruby data-generators/log-generator/stream-logs-to-kafka.rb 10 .2
+$ heroku run ruby data-generators/log-generator/stream-logs-to-kafka.rb 10 .2 --app sushi
 ```
 
 Alternatively, if you have Ruby and Bundler installed locally, you can run the data generator locally
