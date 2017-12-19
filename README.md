@@ -160,6 +160,4 @@ HEROKU_KAFKA_PREFIX=$(heroku config:get HEROKU_KAFKA_PREFIX) \
 bundle exec ruby stream-logs-to-kafka.rb 10 .2
 ```
 
-Looking at the Heroku applications logs, you will see that an anomaly has been detected:
-```
-```
+Looking at the Heroku applications logs, you will see STDOUT output showing an anomaly has been detected.
