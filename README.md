@@ -129,7 +129,7 @@ bundle exec ruby stream-lines-to-kafka.rb alice-in-wonderland.txt
 Now we can see the word count for specific time windows:
 
 ```bash
-$ heroku pg:psql -c 'select * from windowed_counts order by count desc' HEROKU_POSTGRESQL_URL
+$ heroku pg:psql -c 'select * from windowed_counts order by time_window desc' HEROKU_POSTGRESQL_URL
 ```
 
 #### Anomaly Detection
