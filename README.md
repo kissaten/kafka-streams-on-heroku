@@ -134,9 +134,14 @@ $ heroku pg:psql -c 'select * from windowed_counts order by count desc' HEROKU_P
 
 #### Anomaly Detection
 
-Let's look at a more interesting use case -- not only because it is more realistic but also because it better showcases continuously updating caluculations based on a stream of data.
+Let's look at a more interesting use case -- not only because it is more realistic but also because it better showcases continuously updating caluculations based on a stream of data. You'll need two separate terminal windows for this.
 
-This will produce into Kafka fake log data at a rate of 10 messages per second with a 20% chance of anomaly.
+In the first one, tail the Heroku application logs
+```
+$ heroku logs --tail --app sushi
+```
+
+In the second one, we'll generate some data.  This will produce into Kafka fake log data at a rate of 10 messages per second with a 20% chance of anomaly.
 
 ```bash
 $ heroku run ruby data-generators/log-generator/stream-logs-to-kafka.rb 10 .2 --app sushi
@@ -155,6 +160,6 @@ HEROKU_KAFKA_PREFIX=$(heroku config:get HEROKU_KAFKA_PREFIX) \
 bundle exec ruby stream-logs-to-kafka.rb 10 .2
 ```
 
-Now we can see...
-
-TODO: SQL query to see near real-time data about anomalies
+Looking at the Heroku applications logs, you will see that an anomaly has been detected:
+```
+```
