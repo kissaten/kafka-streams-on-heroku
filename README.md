@@ -79,7 +79,7 @@ Create the application:
 $ cd kafka-streams-on-heroku
 $ heroku apps:create <application name>
 $ heroku buildpacks:add heroku/ruby
-$ heroku buildpacks:add heroku/java
+$ heroku buildpacks:add heroku/gradle
 ```
 
 Deploy the application:
