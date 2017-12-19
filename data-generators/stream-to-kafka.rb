@@ -28,8 +28,8 @@ def initialize_kafka
   end
 end
 
-def kafka_topic
-  kafka_topic = ENV.fetch('HEROKU_KAFKA_TOPIC', 'textlines')
+def kafka_topic(topic_name)
+  kafka_topic = ENV.fetch('HEROKU_KAFKA_TOPIC', topic_name)
   if ENV['HEROKU_KAFKA_PREFIX']
     kafka_topic = ENV['HEROKU_KAFKA_PREFIX'] + kafka_topic
   end
@@ -37,6 +37,6 @@ def kafka_topic
   kafka_topic
 end
 
-def produce(message)
-  $producer.produce(message, topic: kafka_topic)
+def produce(message, to: 'textlines')
+  $producer.produce(message, topic: kafka_topic(to))
 end

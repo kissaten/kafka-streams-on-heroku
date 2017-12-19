@@ -34,9 +34,9 @@ end
 
 while true
   if rand(100) <= probability_of_anomality
-    produce(log_line_with_anomaly)
+    produce(log_line_with_anomaly, to: 'loglines')
   else
-    produce(log_line)
+    produce(log_line, to: 'loglines')
   end
   count += 1
   print "#{count}..." if (count % 10) == 0

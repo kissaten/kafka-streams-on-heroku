@@ -7,7 +7,7 @@ count = 0
 ARGF.each_line do |line|
   line.strip!
   unless line.empty?
-    produce(line)
+    produce(line, to: 'textlines')
     count += 1
   end
   print '.' if (ARGF.lineno % 100) == 0
