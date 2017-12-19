@@ -70,7 +70,7 @@ heroku plugins:install heroku-kafka
 Clone the application:
 
 ```
-$ git clone git@github.com:jeffchao/kafka-streams-on-heroku.git
+$ git clone git@github.com:kissaten/kafka-streams-on-heroku.git
 ```
 
 Create the application:
