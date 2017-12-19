@@ -1,4 +1,4 @@
-require '../stream-to-kafka'
+require_relative '../stream-to-kafka'
 require 'faker'
 
 # spec: user_id | timestamp | ip_address | action | message

@@ -1,4 +1,4 @@
-require '../stream-to-kafka'
+require_relative '../stream-to-kafka'
 
 initialize_kafka
 
