@@ -46,10 +46,11 @@ public class PostgresSink implements Processor<Windowed<String>, Long> {
     log.info("writing to pg: window: {}, key: {}, value: {}", key.window(), key.key(), value);
     try {
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO windowed_counts (time_window, word, count) VALUES (?, ?, ?)");
+          "INSERT INTO windowed_counts (time_window, word, count) VALUES (?, ?, ?) ON CONFLICT (time_window, word) DO UPDATE count = ?");
       statement.setLong(1, key.window().start());
       statement.setString(2, key.key());
       statement.setLong(3, value);
+      statement.setLong(4, value);
 
       statement.execute();
     } catch (SQLException e) {
