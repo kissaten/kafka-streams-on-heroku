@@ -9,6 +9,10 @@ setup_dedicated () {
     heroku kafka:topics:create textlines --partitions 5 -a ${APP_NAME} && \
     heroku kafka:topics:create words --partitions 5 -a ${APP_NAME} && \
     heroku kafka:topics:create loglines --partitions 5 -a ${APP_NAME}
+    heroku kafka:topics:create aggregator-app-windowed-counts-changelog --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create aggregator-app-windowed-counts-repartition --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create anomaly-detector-app-windowed-counts-changelog --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create anomaly-detector-app-windowed-counts-repartition --partitions 5 -a ${APP_NAME} && \
 }
 
 setup_multi_tenant () {
