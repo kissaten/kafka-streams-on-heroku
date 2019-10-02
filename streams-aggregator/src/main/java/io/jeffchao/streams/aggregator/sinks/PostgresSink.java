@@ -11,7 +11,6 @@ import java.util.Optional;
 import org.apache.kafka.streams.kstream.Windowed;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
-import org.apache.kafka.streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
