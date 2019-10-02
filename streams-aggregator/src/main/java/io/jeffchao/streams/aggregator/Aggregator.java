@@ -46,7 +46,10 @@ public class Aggregator {
         .toStream()
         .process(PostgresSink::new);
 
-    final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
+    final Topology topology = builder.build();
+    System.out.println(topology.describe());
+
+    final KafkaStreams streams = new KafkaStreams(topology, streamsConfig);
 
     streams.cleanUp();
     streams.start();
