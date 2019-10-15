@@ -48,6 +48,9 @@ public class Aggregator {
         .process(PostgresSink::new);
 
     final Topology topology = builder.build();
+
+    // Log topology at startup, for debugging
+    // More about the topology graph: https://www.confluent.io/blog/optimizing-kafka-streams-applications
     System.out.println(topology.describe());
 
     final KafkaStreams streams = new KafkaStreams(topology, streamsConfig);
