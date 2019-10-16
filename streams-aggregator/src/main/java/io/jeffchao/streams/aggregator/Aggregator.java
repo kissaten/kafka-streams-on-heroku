@@ -16,6 +16,7 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.apache.kafka.streams.kstream.Windowed;
+import org.apache.kafka.streams.Topology;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +47,13 @@ public class Aggregator {
         .toStream()
         .process(PostgresSink::new);
 
-    final KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfig);
+    final Topology topology = builder.build();
+
+    // Log topology at startup, for debugging
+    // More about the topology graph: https://www.confluent.io/blog/optimizing-kafka-streams-applications
+    System.out.println(topology.describe());
+
+    final KafkaStreams streams = new KafkaStreams(topology, streamsConfig);
 
     streams.cleanUp();
     streams.start();

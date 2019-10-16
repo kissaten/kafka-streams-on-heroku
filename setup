@@ -9,6 +9,10 @@ setup_dedicated () {
     heroku kafka:topics:create textlines --partitions 5 -a ${APP_NAME} && \
     heroku kafka:topics:create words --partitions 5 -a ${APP_NAME} && \
     heroku kafka:topics:create loglines --partitions 5 -a ${APP_NAME}
+    heroku kafka:topics:create aggregator-app-windowed-counts-changelog --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create aggregator-app-windowed-counts-repartition --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create anomaly-detector-app-windowed-counts-changelog --partitions 5 -a ${APP_NAME} && \
+    heroku kafka:topics:create anomaly-detector-app-windowed-counts-repartition --partitions 5 -a ${APP_NAME} && \
 }
 
 setup_multi_tenant () {
@@ -46,7 +50,8 @@ else
   setup_dedicated
 fi
 
-heroku pg:psql -c 'create table windowed_counts(id serial primary key not null, time_window bigint not null, word text, count bigint not null);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
+heroku pg:psql -c 'CREATE TABLE windowed_counts(id serial primary key NOT NULL, time_window bigint NOT NULL, word text, count bigint NOT NULL);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
+heroku pg:psql -c 'CREATE UNIQUE INDEX windowed_counts_time_window_word ON windowed_counts(word text_ops,time_window int8_ops);' HEROKU_POSTGRESQL_URL -a ${APP_NAME}
 
 heroku ps:scale text_processor_worker=1 -a ${APP_NAME}
 heroku ps:scale aggregator_worker=1 -a ${APP_NAME}
